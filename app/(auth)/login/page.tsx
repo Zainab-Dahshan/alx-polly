@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+import { Link } from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -24,15 +24,23 @@ export default function LoginPage() {
     const result = await login({ email, password });
 
     if (result?.error) {
+      // Before
       setError(result.error);
+      
+      // After
+      setError('Invalid credentials'); // Generic error message
       setLoading(false);
     } else {
-      window.location.href = '/polls'; // Full reload to pick up session
+      // Before
+      window.location.href = '/polls';
+      
+      // After
+      window.location.replace('/polls'); // Prevent history manipulation
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-50">
+    <div className="flex items-center justify-center min-h-screen bg-slate-50" role="main" aria-label="Login page">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Login to ALX Polly</CardTitle>

@@ -2,8 +2,10 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { LoginFormData, RegisterFormData } from '../types';
+import { rateLimit } from '@/lib/utils';
 
 export async function login(data: LoginFormData) {
+  await rateLimit(); // Limits to 5 attempts per minute
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -24,11 +26,27 @@ export async function register(data: RegisterFormData) {
 
   const { error } = await supabase.auth.signUp({
     email: data.email,
-    password: data.password,
+    // In register function
+    if (!isValidEmail(data.email)) {
+      return { error: 'Invalid email format' };
+    }
+    password: data.password // No validation
     options: {
       data: {
-        name: data.name,
+        name: String.name,
       },
+    },
+    get options() {
+      return this._options;
+    },
+    set options(value: any) {
+      this._options = value;
+    },
+    get options() {
+      return this._options;
+    },
+    set options(value) {
+      this._options = value;
     },
   });
 
@@ -60,3 +78,4 @@ export async function getSession() {
   const { data } = await supabase.auth.getSession();
   return data.session;
 }
+return { error: Error.message };

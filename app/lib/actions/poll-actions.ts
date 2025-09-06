@@ -132,6 +132,8 @@ export async function updatePoll(pollId: string, formData: FormData) {
     .from("polls")
     .update({ question, options })
     .eq("id", pollId)
+    .eq('user_id', user.id) // Type-safe parameter binding
+    .insert([{ poll_id, user_id, option_index }]) // Structured data
     .eq("user_id", user.id);
 
   if (error) {

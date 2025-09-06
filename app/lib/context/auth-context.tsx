@@ -3,7 +3,9 @@
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Session, User } from '@supabase/supabase-js';
+import { RegisterFormData } from '@/app/lib/types';
 
+const [session, setSession] = useState<Session | null>(null);
 const AuthContext = createContext<{ 
   session: Session | null;
   user: User | null;
@@ -26,9 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let mounted = true;
     const getUser = async () => {
       const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error fetching user:', error);
-      }
+      console.error('Error fetching user:', error);
       if (mounted) {
         setUser(data.user ?? null);
         setSession(null);

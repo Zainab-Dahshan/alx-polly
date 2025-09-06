@@ -1,8 +1,9 @@
 // User types
-export interface User {
+export interface RegisterFormData {
   id: string;
   name: string;
   email: string;
+  password: string;
   image?: string;
   createdAt: Date;
   updatedAt: Date;
